@@ -61,4 +61,18 @@ const listWithTag = document.getElementsByTagName("li");
 listWithTag[listWithTag.length - 1].style.color = "blue"
 
 
+/**
+ * Query selector - second item green and third invisible
+ */
+const secli = document.querySelector('.list-group-item:nth-child(2)')
+const thirdli = document.querySelector('.list-group-item:nth-child(3)')
+secli.style.backgroundColor = "green";
+thirdli.style.display = "none";
 
+//make 2 green and make odd bg green
+const queryalllist = document.querySelectorAll('.list-group-item')
+queryalllist[1].style.color = "green";
+const oddlist = document.querySelectorAll('.list-group-item:nth-child(odd)')
+for (let i = 0; i < oddlist.length; i++) {
+    oddlist[i].style.backgroundColor = "green";
+}
