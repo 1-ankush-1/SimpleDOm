@@ -48,9 +48,10 @@ main.style.color = "green";
 let items = document.getElementsByClassName('list-group-item');
 //make background green of 3rd
 items[2].style.backgroundColor = "green";
-
-
-
+//make color black of all items
+for (let item of items) {
+    item.style.color = "black";
+}
 
 
 
