@@ -53,6 +53,12 @@ for (let item of items) {
     item.style.color = "black";
 }
 
+//added li without classname
+const list = document.getElementsByClassName("list-group");
+list[0].children[list[0].children.length - 1].style.color = "red";
+
+const listWithTag = document.getElementsByTagName("li");
+listWithTag[listWithTag.length - 1].style.color = "blue"
 
 
 
