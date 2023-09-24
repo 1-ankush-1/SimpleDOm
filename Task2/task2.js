@@ -44,9 +44,14 @@ const header = document.getElementById("main-header");
 header.style.borderBottom = "solid 3px black";
 main.style.color = "green";
 
-
-
-
+/**getElementsByClassName */
+let items = document.getElementsByClassName('list-group-item');
+//make background green of 3rd
+items[2].style.backgroundColor = "green";
+//make color black of all items
+for (let item of items) {
+    item.style.color = "black";
+}
 
 
 
