@@ -76,3 +76,94 @@ const oddlist = document.querySelectorAll('.list-group-item:nth-child(odd)')
 for (let i = 0; i < oddlist.length; i++) {
     oddlist[i].style.backgroundColor = "green";
 }
+
+/**
+ * Traversing the Dom
+*/
+
+var itemList = document.querySelector("#items");
+
+//parentnode - get parent
+itemList.parentNode.style.backgroundColor = "#f4f4f4"
+console.log(itemList.parentNode.parentNode)
+
+//parentElement - same as parennode
+itemList.parentElement.style.backgroundColor = "#f4f4f4"
+console.log(itemList.parentElement.parentElement)
+
+//childnode - get all childs(but it also takes linebreak(the hit enter))
+console.log(itemList.childNodes);
+
+//children - same as childnode except do not take linebreak (recommanded)
+console.log(itemList.children);
+
+//firstchild - it include linebreak too
+console.log(itemList.firstChild);
+
+//firstElementChild - same as firstchild except linebreak(recommanded)
+console.log(itemList.firstElementChild);
+
+//lastchild - it include linebreak too
+console.log(itemList.lastchild);
+
+//lastElementChild - same as lastchild except linebreak(recommanded)
+console.log(itemList.lastElementChild);
+
+//nextSibling - it include linebreak too
+console.log(itemList.nextSibling);
+
+//nextElementSibling - same as nextSibling except linebreak
+console.log(itemList.nextElementSibling);
+
+//previousSibling - it include linebreak too
+console.log(itemList.previousSibling);
+
+//previousElementSibling - same as previousSibling except linebreak
+console.log(itemList.previousElementSibling);
+
+//------ADD DIV----------//
+
+//createElement
+let newDiv = document.createElement("div");
+
+//add class
+newDiv.className = 'divclass'
+
+//add id
+newDiv.id = 'divid'
+
+//set attributes
+newDiv.setAttribute('title', 'div added')
+
+//create text node
+let newDivText = document.createTextNode('Hello World');
+
+//append child 
+newDiv.appendChild(newDivText);
+
+//insert the div - insert the div before h1 
+let container = document.querySelector("header .container");
+let h1 = document.querySelector("header h1");
+container.insertBefore(newDiv, h1);
+
+//------ADD DIV END----------//
+
+
+//add hello before item list and item 1
+
+//After add item - create the element full then get element where you want to insert
+const h3 = document.createElement("h2");
+h3.className = "head2";
+const h3text = document.createTextNode("Hello World");
+h3.appendChild(h3text);
+let beforeItemList = document.querySelector(".form-inline");
+let ulist = document.querySelector("#items");
+let mainPlace = ulist.parentElement;
+mainPlace.insertBefore(h3,beforeItemList);
+
+//before item
+const h2 = document.createElement("h2");
+h2.className = "head2";
+const h2text = document.createTextNode("Hello World");
+h2.appendChild(h2text);
+mainPlace.insertBefore(h2, ulist);
