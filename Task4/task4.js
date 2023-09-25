@@ -9,6 +9,8 @@ function addUser(e) {
     //set item in localstorage
     localStorage.setItem(user.email, JSON.stringify(user));
     addinTable(user);
+    //reset the input field data
+    formData.reset();
 }
 
 //add user in table
@@ -22,11 +24,15 @@ function addinTable(user) {
     email.textContent = user.email;
     let phone = document.createElement('td');
     phone.textContent = user.phone;
+    //create opearation row to hold edit and delete
     let operations = document.createElement('td');
     let btndel = document.createElement('button');
     btndel.className = "btn btn-danger delete";
-    btndel.id = "del";
     btndel.textContent = "Delete";
+    let editbtn = document.createElement("button");
+    editbtn.className = "btn btn-primary me-2 edit"
+    editbtn.textContent = "Edit";
+    operations.appendChild(editbtn);
     operations.appendChild(btndel);
     //three child in row
     row.appendChild(name);
@@ -50,7 +56,23 @@ function deleteUser(e) {
             localStorage.removeItem(row.cells[1].innerText);
         }
     }
+    //check if any class contains edit
+    if (e.target.classList.contains("edit")) {
+        //get row and all celll data
+        let row = e.target.parentElement.parentElement;
+        let name = row.cells[0].innerText;
+        let email = row.cells[1].innerText;
+        let phone = row.cells[2].innerText;
 
+        // Remove the row from table and localhost
+        body.removeChild(row);
+        localStorage.removeItem(row.cells[1].innerText);
+
+        //putting values in input fields
+        document.getElementById('name').value = name;
+        document.getElementById('email').value = email;
+        document.getElementById('phone').value = phone;
+    }
 }
 
 //get form data and listen for event
