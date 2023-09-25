@@ -16,7 +16,8 @@ function Add(e) {
     e.preventDefault();
     //get the value to insert in item
     let newItem = document.getElementById('item').value;
-    if (newItem === "") {
+    let item2 = document.getElementById('item2').value;
+    if (newItem === "" || item2 === "") {
         return;
     }
     //create element
@@ -25,6 +26,11 @@ function Add(e) {
     ItemToAdd.className = 'list-group-item';
     //append text node
     ItemToAdd.appendChild(document.createTextNode(newItem));
+    //add break so display on next line
+    let newLine = document.createElement('br');
+    ItemToAdd.appendChild(newLine);
+    //append description text
+    ItemToAdd.appendChild(document.createTextNode(item2));
 
     //create del button
     let del = document.createElement("button");
@@ -49,10 +55,35 @@ function Add(e) {
 
     //clear the state
     document.getElementById('item').value = "";
+    document.getElementById('item2').value = "";
 }
 
-//get form and listen for events
+function filterItem(e) {
+    e.preventDefault();
+    //get text
+    let inp = e.target.value.toLowerCase();
+    //get all items
+    let list = itemList.getElementsByTagName('li');
+    //convert to array and check if elementcontent not mathch hide it
+    Array.from(list).forEach((item) => {
+        //get name and desc
+        let itemName = item.firstChild.textContent;
+        let desc = item.firstChild.nextSibling.nextSibling.textContent;
+        //check if name or descrip exist
+        if (itemName.toLowerCase().indexOf(inp) != -1 || desc.toLowerCase().indexOf(inp) != -1) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    })
+}
+
+//get Elements
 let form = document.getElementById('addForm');
 let itemList = document.getElementById('items');
+let filter = document.getElementById('filter');
+
+//listen for events
 form.addEventListener('submit', Add)
 itemList.addEventListener('click', Remove)
+filter.addEventListener('keyup', filterItem);
