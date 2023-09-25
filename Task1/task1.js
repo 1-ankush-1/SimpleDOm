@@ -16,12 +16,11 @@ formData.addEventListener("submit", (e) => {
         ans[name] = value;
     }
     //printing result
-    console.log(ans);
+    localStorage.setItem("UserData", JSON.stringify(ans));
 });
 
 let btn = document.querySelector(".btn");
 btn.addEventListener('click', e => {
-    console.log(e);
     e.target.value = "Open the console.log ==>";
 });
 

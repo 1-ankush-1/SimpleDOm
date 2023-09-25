@@ -17,11 +17,11 @@ function Add(e) {
     //get the value to insert in item
     let newItem = document.getElementById('item').value;
     let item2 = document.getElementById('item2').value;
-
+    
     if (newItem === "" || item2 === "") {
         return;
     }
-    
+
     //storing the details in localstorage
     const detail = {
         "subject": newItem,
