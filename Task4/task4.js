@@ -82,6 +82,8 @@ function addinTable(user) {
     row.appendChild(email);
     row.appendChild(phone);
     row.appendChild(operations);
+
+    row.id = user._id;
     //add row in body
     body.appendChild(row)
 }
@@ -93,12 +95,25 @@ function deleteUser(e) {
         if (confirm("Are you sure!")) {
             //get the row
             let row = e.target.parentElement.parentElement;
-            //remove the row from table
-            body.removeChild(row);
-            //remove the row from localhost
-            localStorage.removeItem(row.cells[1].innerText);
+
+            //delete item from server and localstorage
+            axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+                //when item get deleted
+                if (res.status === 200) {
+                    let allAppointments = JSON.parse(localStorage.getItem("appoint"));
+                    //compare by id
+                    const data = allAppointments.filter((app) => {
+                        return app._id !== row.id
+                    })
+                    //setting localstorage after removing item
+                    localStorage.setItem("appoint", JSON.stringify(data));
+                    //remove the row from table
+                    body.removeChild(row);
+                }
+            }).catch(err => console.log(err));
         }
     }
+
     //check if any class contains edit
     if (e.target.classList.contains("edit")) {
         //get row and all celll data
