@@ -1,4 +1,39 @@
-//get data from form
+//fetch old records
+async function onloadData() {
+    try {
+        //get data
+        const appointments = await axios.get("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment");
+
+        //check if data is empty
+        if (appointments.data.length <= 0) {
+            return;
+        }
+        //setting data in localstorage
+        localStorage.setItem("appoint", JSON.stringify(appointments.data));
+
+        //adding data in table
+        for (let e of appointments.data) {
+            addinTable(e)
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+//onload - check if localstorage hold data then fetch it from there else fetch from server
+window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("appoint")) {
+        //adding data in table
+        const appointments = JSON.parse(localStorage.getItem("appoint"));
+        for (let e of appointments) {
+            addinTable(e)
+        }
+    } else {
+        onloadData();
+    }
+})
+
+//add new data
 function addUser(e) {
     e.preventDefault();
     let data = new FormData(e.target);
@@ -6,11 +41,19 @@ function addUser(e) {
     for (let [name, value] of data) {
         user[name] = value
     }
-    //set item in localstorage
-    localStorage.setItem(user.email, JSON.stringify(user));
-    addinTable(user);
-    //reset the input field data
-    formData.reset();
+    axios.post("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment", user).then((res) => {
+        //when get response from backend add it in localstorage
+        if (Object.keys(res?.data).length > 0) {
+            let allAppointments = JSON.parse(localStorage.getItem("appoint")) ?? [];
+            allAppointments.push(res.data);
+            localStorage.setItem("appoint", JSON.stringify(allAppointments));
+
+            //adding data in table
+            addinTable(res.data);
+            //reset the input field data
+            formData.reset();
+        }
+    }).catch(err => console.log(err));
 }
 
 //add user in table
@@ -39,10 +82,13 @@ function addinTable(user) {
     row.appendChild(email);
     row.appendChild(phone);
     row.appendChild(operations);
+
+    row.id = user._id;
     //add row in body
     body.appendChild(row)
 }
 
+//Delete and Edit User
 function deleteUser(e) {
     e.preventDefault();
     //check if any class contains delete
@@ -50,12 +96,25 @@ function deleteUser(e) {
         if (confirm("Are you sure!")) {
             //get the row
             let row = e.target.parentElement.parentElement;
-            //remove the row from table
-            body.removeChild(row);
-            //remove the row from localhost
-            localStorage.removeItem(row.cells[1].innerText);
+
+            //delete item from server and localstorage
+            axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+                //when item get deleted
+                if (res.status === 200) {
+                    let allAppointments = JSON.parse(localStorage.getItem("appoint"));
+                    //compare by id
+                    const data = allAppointments.filter((app) => {
+                        return app._id !== row.id
+                    })
+                    //setting localstorage after removing item
+                    localStorage.setItem("appoint", JSON.stringify(data));
+                    //remove the row from table
+                    body.removeChild(row);
+                }
+            }).catch(err => console.log(err));
         }
     }
+
     //check if any class contains edit
     if (e.target.classList.contains("edit")) {
         //get row and all celll data
@@ -64,14 +123,26 @@ function deleteUser(e) {
         let email = row.cells[1].innerText;
         let phone = row.cells[2].innerText;
 
-        // Remove the row from table and localhost
-        body.removeChild(row);
-        localStorage.removeItem(row.cells[1].innerText);
+        //delete from all places
+        axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+            //when item get deleted
+            if (res.status === 200) {
+                let allAppointments = JSON.parse(localStorage.getItem("appoint"));
+                //compare by id
+                const data = allAppointments.filter((app) => {
+                    return app._id !== row.id
+                })
+                //setting localstorage after removing item
+                localStorage.setItem("appoint", JSON.stringify(data));
+                //remove the row from table
+                body.removeChild(row);
 
-        //putting values in input fields
-        document.getElementById('name').value = name;
-        document.getElementById('email').value = email;
-        document.getElementById('phone').value = phone;
+                //putting values in input fields
+                document.getElementById('name').value = name;
+                document.getElementById('email').value = email;
+                document.getElementById('phone').value = phone;
+            }
+        }).catch(err => console.log(err));
     }
 }
 
