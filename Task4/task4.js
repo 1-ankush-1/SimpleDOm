@@ -1,4 +1,39 @@
-//get data from form
+//fetch old records
+async function onloadData() {
+    try {
+        //get data
+        const appointments = await axios.get("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment");
+
+        //check if data is empty
+        if (appointments.data.length <= 0) {
+            return;
+        }
+        //setting data in localstorage
+        localStorage.setItem("appoint", JSON.stringify(appointments.data));
+
+        //adding data in table
+        for (let e of appointments.data) {
+            addinTable(e)
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+//onload - check if localstorage hold data then fetch it from there else fetch from server
+window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("appoint")) {
+        //adding data in table
+        const appointments = JSON.parse(localStorage.getItem("appoint"));
+        for (let e of appointments) {
+            addinTable(e)
+        }
+    } else {
+        onloadData();
+    }
+})
+
+//add new data
 function addUser(e) {
     e.preventDefault();
     let data = new FormData(e.target);
@@ -6,15 +41,19 @@ function addUser(e) {
     for (let [name, value] of data) {
         user[name] = value
     }
-
     axios.post("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment", user).then((res) => {
-        console.log("done", res);
-        //set item in localstorage
-        // localStorage.setItem(user.email, JSON.stringify(user));
-        addinTable(user);
+        //when get response from backend add it in localstorage
+        if (Object.keys(res?.data).length > 0) {
+            let allAppointments = JSON.parse(localStorage.getItem("appoint")) ?? [];
+            allAppointments.push(res.data);
+            localStorage.setItem("appoint", JSON.stringify(allAppointments));
+
+            //adding data in table
+            addinTable(res.data);
+            //reset the input field data
+            formData.reset();
+        }
     }).catch(err => console.log(err));
-    //reset the input field data
-    formData.reset();
 }
 
 //add user in table
