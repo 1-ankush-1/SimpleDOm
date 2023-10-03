@@ -88,6 +88,7 @@ function addinTable(user) {
     body.appendChild(row)
 }
 
+//Delete and Edit User
 function deleteUser(e) {
     e.preventDefault();
     //check if any class contains delete
@@ -122,14 +123,26 @@ function deleteUser(e) {
         let email = row.cells[1].innerText;
         let phone = row.cells[2].innerText;
 
-        // Remove the row from table and localhost
-        body.removeChild(row);
-        localStorage.removeItem(row.cells[1].innerText);
+        //delete from all places
+        axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+            //when item get deleted
+            if (res.status === 200) {
+                let allAppointments = JSON.parse(localStorage.getItem("appoint"));
+                //compare by id
+                const data = allAppointments.filter((app) => {
+                    return app._id !== row.id
+                })
+                //setting localstorage after removing item
+                localStorage.setItem("appoint", JSON.stringify(data));
+                //remove the row from table
+                body.removeChild(row);
 
-        //putting values in input fields
-        document.getElementById('name').value = name;
-        document.getElementById('email').value = email;
-        document.getElementById('phone').value = phone;
+                //putting values in input fields
+                document.getElementById('name').value = name;
+                document.getElementById('email').value = email;
+                document.getElementById('phone').value = phone;
+            }
+        }).catch(err => console.log(err));
     }
 }
 
