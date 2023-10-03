@@ -6,9 +6,13 @@ function addUser(e) {
     for (let [name, value] of data) {
         user[name] = value
     }
-    //set item in localstorage
-    localStorage.setItem(user.email, JSON.stringify(user));
-    addinTable(user);
+
+    axios.post("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment", user).then((res) => {
+        console.log("done", res);
+        //set item in localstorage
+        // localStorage.setItem(user.email, JSON.stringify(user));
+        addinTable(user);
+    }).catch(err => console.log(err));
     //reset the input field data
     formData.reset();
 }
