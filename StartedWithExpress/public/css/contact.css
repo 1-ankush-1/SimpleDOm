@@ -1,0 +1,48 @@
+/**main*/
+main {
+  margin-top: 10px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+form {
+  padding: 2rem 1rem 3rem 1rem;
+  border-radius: 5px;
+  border: 1px solid rgb(184, 116, 6);
+  height: 40%;
+  width: 40%;
+}
+form .form-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+form .form-body {
+  display: flex;
+  flex-direction: column;
+}
+form input {
+  border: 1px solid rgb(184, 116, 6);
+  font: inherit;
+  border-radius: 2px;
+}
+form .form-body > *:last-child {
+  margin-top: 30px;
+  text-decoration: none;
+  cursor: pointer;
+  font: inherit;
+  height: 40px;
+  border: 1px solid rgb(184, 116, 6);
+  color: rgb(184, 116, 6);
+  background: white;
+  border-radius: 3px;
+}
+
+form .form-body > *:last-child:hover,
+form .form-body > *:last-child:active {
+  background-color: rgb(184, 116, 6);
+  color: white;
+}
