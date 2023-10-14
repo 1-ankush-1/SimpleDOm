@@ -1,7 +1,10 @@
-const mysql = require("mysql2");
-const DBconfig = require("./dbConfig");
+const DBconfig = require("./dbConfig.js");
+const Sequelize = require("sequelize");
 
-//create poll of connection instead of connecting and disconnecting again and again
-const pool = mysql.createPool(DBconfig)
+const sequelize = new Sequelize(DBconfig.database, DBconfig.user,
+    DBconfig.password, {
+    host: DBconfig.host,
+    dialect: DBconfig.dialect,
+});
 
-module.exports = pool.promise();
+module.exports = sequelize;
