@@ -5,7 +5,7 @@ const userRoutes = require("./user_routes.js");
 const router = express.Router();
 
 router.use("/auth", authRoutes);
-router.use("/home", userRoutes);
+router.use("/user", userRoutes);
 
 //if no route found
 router.use((req, res, next) => {
