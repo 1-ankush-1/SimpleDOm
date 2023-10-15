@@ -2,17 +2,18 @@
 async function onloadData() {
     try {
         //get data
-        const appointments = await axios.get("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment");
+        const appointments = await axios.get("http://localhost:3000/user");
+        console.log(appointments.data.data);
 
         //check if data is empty
-        if (appointments.data.length <= 0) {
+        if (appointments.data.data.length <= 0) {
             return;
         }
         //setting data in localstorage
-        localStorage.setItem("appoint", JSON.stringify(appointments.data));
+        localStorage.setItem("appoint", JSON.stringify(appointments.data.data));
 
         //adding data in table
-        for (let e of appointments.data) {
+        for (let e of appointments.data.data) {
             addinTable(e)
         }
     } catch (err) {
@@ -22,15 +23,7 @@ async function onloadData() {
 
 //onload - check if localstorage hold data then fetch it from there else fetch from server
 window.addEventListener("DOMContentLoaded", () => {
-    // if (localStorage.getItem("appoint")) {
-    //     //adding data in table
-    //     const appointments = JSON.parse(localStorage.getItem("appoint"));
-    //     for (let e of appointments) {
-    //         addinTable(e)
-    //     }
-    // } else {
     onloadData();
-    // }
 })
 
 //add new data
@@ -41,15 +34,15 @@ function addUser(e) {
     for (let [name, value] of data) {
         user[name] = value
     }
-    axios.post("https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment", user).then((res) => {
+    axios.post("http://localhost:3000/auth/register", user).then((res) => {
         //when get response from backend add it in localstorage
-        if (Object.keys(res?.data).length > 0) {
+        if (Object.keys(res?.data.data).length > 0) {
             let allAppointments = JSON.parse(localStorage.getItem("appoint")) ?? [];
-            allAppointments.push(res.data);
+            allAppointments.push(res.data.data);
             localStorage.setItem("appoint", JSON.stringify(allAppointments));
 
             //adding data in table
-            addinTable(res.data);
+            addinTable(res.data.data);
             //reset the input field data
             formData.reset();
         }
@@ -83,7 +76,7 @@ function addinTable(user) {
     row.appendChild(phone);
     row.appendChild(operations);
 
-    row.id = user._id;
+    row.id = user.userid;
     //add row in body
     body.appendChild(row)
 }
@@ -98,7 +91,7 @@ function deleteUser(e) {
             let row = e.target.parentElement.parentElement;
 
             //delete item from server and localstorage
-            axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+            axios.delete(`http://localhost:3000/user/delete/${row.id}`).then((res) => {
                 //when item get deleted
                 if (res.status === 200) {
                     let allAppointments = JSON.parse(localStorage.getItem("appoint"));
@@ -124,7 +117,7 @@ function deleteUser(e) {
         let phone = row.cells[2].innerText;
 
         //delete from all places
-        axios.delete(`https://crudcrud.com/api/bfcf10f3434a4905bcd2d50682d61bca/Appointment/${row.id}`).then((res) => {
+        axios.delete(`http://localhost:3000/user/delete/${row.id}`).then((res) => {
             //when item get deleted
             if (res.status === 200) {
                 let allAppointments = JSON.parse(localStorage.getItem("appoint"));
