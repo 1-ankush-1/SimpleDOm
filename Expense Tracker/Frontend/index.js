@@ -133,7 +133,7 @@ function removeChild(row) {
 
             //filter data in localstorage
             const result = expenses.filter((e) => {
-                return app.id !== row.id
+                return e.id !== parseInt(row.id)
             })
 
             //set the data again
