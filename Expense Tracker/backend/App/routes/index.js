@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
+const expenseRoutes = require("./expense_route.js");
 
-router.use("/expense", (req,res,next)=>{
-    console.log("in")
-});
+router.use("/expense", expenseRoutes);
 
 //if no route found
 router.use((req, res, next) => {
