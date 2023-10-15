@@ -3,6 +3,7 @@ const cors = require("cors");
 const bodyparser = require("body-parser");
 const path = require("path");
 const Router = require("./App/routes/index.js");
+const sequelize = require("./App/config/connect.js");
 
 const app = express();
 
@@ -17,6 +18,11 @@ app.use(express.static(path.join(__dirname, 'public')));
  * Routes
 */
 app.use(Router);
+
+sequelize.sync().then(() => {
+}).catch(err => {
+    console.log(`${err} occured whne syncing with sequalize`)
+});
 
 /**
  * start server
