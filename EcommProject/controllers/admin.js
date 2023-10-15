@@ -20,8 +20,9 @@ exports.postAddProduct = (req, res, next) => {
     price,
     description
   }
-
-  Product.create(product).then(() => {
+  //or you can put the associated user id in object and created new Product directly
+  //here sequalize automatically create a createProduct for user because me made association create+nameoftable
+  req.user.createProduct(product).then(() => {
     res.redirect("/admin/products");
   }).catch(err => {
     console.log(`${err} in postAddProduct`)
@@ -34,20 +35,26 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect('/');
   }
   const { productId: prodId } = req.params;
-  Product.findByPk(prodId).then(product => {
-    if (!product) {
-      return res.redirect("/");
+  req.user.getProducts(
+    {
+      where: {
+        id: prodId
+      }
+    }).then(products => {
+      const product = products[0];
+      if (!product) {
+        return res.redirect("/");
+      }
+      res.render('admin/edit-product', {
+        pageTitle: 'Add Product',
+        path: '/admin/edit-product',
+        editing: editMode,
+        product: product
+      });
     }
-    res.render('admin/edit-product', {
-      pageTitle: 'Add Product',
-      path: '/admin/edit-product',
-      editing: editMode,
-      product: product
-    });
-  }
-  ).catch(err => {
-    console.log(`${err} in getEditProduct`)
-  })
+    ).catch(err => {
+      console.log(`${err} in getEditProduct`)
+    })
 };
 
 exports.postEditProduct = (req, res, next) => {
@@ -78,7 +85,7 @@ exports.deleteproductbyID = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-  Product.findAll().then((products) => {
+  req.user.getProducts().then((products) => {
     res.render('admin/products', {
       prods: products,
       pageTitle: 'Admin Products',
