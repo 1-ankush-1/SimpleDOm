@@ -1,0 +1,28 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@100;400&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: monospace, sans-serif;
+  line-height: 1.6;
+}
+
+ul {
+  list-style: none;
+}
+
+.card-header:hover,
+.btn:hover {
+  background-color: black !important;
+  color: white;
+}
+.nav-item h1 span{
+    margin-left: 10px;
+    font-weight: 400;
+    font-style: italic;
+    font-size: x-large !important;
+}
