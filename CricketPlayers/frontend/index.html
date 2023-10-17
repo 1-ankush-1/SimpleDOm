@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Cric X</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" type="text/css" media="screen" href="index.css" />
+  </head>
+  <body>
+    <!--Header-->
+    <header>
+      <nav
+        class="navbar bg-light border-bottom rounded-end shadow border-2 z-1 justify-content-around"
+      >
+        <div class="nav-item fw-bold nav">
+          <h1>Cric<span>X</span>🏏</h1>
+        </div>
+        <div>
+          <form id="searchform" title="Enter name to find Player">
+            <!-- <label for="name" class="form-label">Find Player:</label> -->
+            <input type="text" class="form-control-sm" name="name" id="p_name" />
+            <input
+              class="btn border-1 border-white"
+              type="submit"
+              value="Search"
+            />
+          </form>
+        </div>
+      </nav>
+    </header>
+    <!--Main Data-->
+    <main class="container mt-3 gap-2" id="parentofAll">
+      <!--Form-->
+      <div class="row gap-1">
+        <div class="col-6 col-lg d-none d-md-none d-lg-block">
+          <img
+            src="./image/_6481a784-7068-4a31-88f7-3a51be282f34.jpg"
+            height="100%"
+            width="100%"
+            class="rounded"
+          />
+        </div>
+        <div class="col-12 col-lg-6 col-xl">
+          <div class="card mx-auto">
+            <div class="card-header text-center bg-info-subtle">
+              <h2 class="card-title" id="some">ADD PLAYER</h2>
+            </div>
+            <div class="card-body bg-light">
+              <form id="playerform" novalidate>
+                <input type="hidden" id="p_id" />
+                <label for="name" class="form-label">Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  name="name"
+                  required
+                />
+                <label class="form-label" for="dob">Date Of Birth</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="dob"
+                  name="dob"
+                  required
+                />
+                <label class="form-label" for="img">Photo Url</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="img"
+                  name="img"
+                  required
+                />
+                <label class="form-label" for="birthplace">BirthPlace</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="birthplace"
+                  name="birthplace"
+                  required
+                />
+                <label class="form-label" for="career">Career</label>
+                <textarea
+                  class="form-control"
+                  cols="1"
+                  rows="3"
+                  id="career"
+                  name="career"
+                  required
+                ></textarea>
+                <label class="form-label" for="noofmatches"
+                  >No of matches</label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  id="noofmatches"
+                  name="noofmatches"
+                  required
+                />
+                <label class="form-label" for="score">Score</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="score"
+                  name="score"
+                  required
+                />
+                <label class="form-label" for="fifties">Fifties</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="fifties"
+                  name="fifties"
+                  required
+                />
+                <label class="form-label" for="century">Centuries</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="century"
+                  name="century"
+                  required
+                />
+                <label class="form-label" for="wickets">Wickets</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="wickets"
+                  name="wickets"
+                  required
+                />
+                <label class="form-label" for="avg">Average</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="avg"
+                  name="avg"
+                  required
+                />
+                <button type="submit" class="btn mt-3 fw-bold offset-3 w-50">
+                  Submit
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!--Player Profile-->
+      <div class="row" id="player_profile">
+        <!-- <div class="row mt-2 mb-2 p-4" style="height: 100vh">
+          <div class="w-100">
+            <form class="Player edit">
+              <button class="btn fw-bold float-end w-20">Edit</button>
+            </form>
+          </div>
+
+          <div
+            class="col-12 col-md-3 p-3 d-flex align-items-center justify-content-center flex-column gap-2"
+          >
+            <div>
+              <img
+                src="https://resources.pulse.icc-cricket.com/photo-resources/2023/09/28/8cb47afc-cc96-47d2-95a3-eeeb983ce0e0/Trophy.jpeg?width=845&height=563"
+                class="img_round"
+                alt="name"
+              />
+            </div>
+            <hr />
+            <ul class="list-group p-4">
+              <li class="list-group-item">
+                <h5>Name : <span>Virat</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>DOB : <span>18/12/1999</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>Matches : <span>50</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>Fifties : <span>50</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>Centuries : <span>50</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>Wickets : <span>50</span></h5>
+              </li>
+              <li class="list-group-item">
+                <h5>Average : <span>50</span></h5>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="col-12 col-md-9 text-center d-flex align-items-center justify-content-center"
+          >
+            <p>
+              SomeData Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Fugiat, earum minima! Debitis, reiciendis ipsa. Accusamus nobis
+              repellat earum, magni ad aliquid minima architecto a, ullam
+              excepturi voluptate harum soluta ipsa?
+            </p>
+          </div>
+        </div> -->
+      </div>
+    </main>
+    <!-- js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
