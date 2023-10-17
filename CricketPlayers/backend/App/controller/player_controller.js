@@ -8,7 +8,8 @@ exports.getAllPlayer = (req, res, next) => {
             data: result
         })
     }).catch(err => {
-        console.log(`${err} in getAllPlayer`)
+        console.log(`${err} in getAllPlayer`);
+        return res.status(500).send({ message: "Something went wrong try again" });
     })
 }
 
@@ -27,7 +28,8 @@ exports.getPlayerByName = (req, res, next) => {
             data: result
         })
     }).catch(err => {
-        console.log(`${err} in getPlayerById`)
+        console.log(`${err} in getPlayerByName`)
+        return res.status(500).send({ message: "Something went wrong try again" });
     })
 }
 
@@ -35,18 +37,19 @@ exports.addPlayer = (req, res, next) => {
 
     const { avg, birthplace, century,
         dob, fifties, img, name, noofmatches
-        , score, wickets } = req.body;
+        , score, wickets, career } = req.body;
 
     const player = {
         avg, birthplace, century,
         dob, fifties, img, name: name.toUpperCase(), noofmatches
-        , score, wickets
+        , score, wickets, career
     };
 
     Player.create(player).then((data) => {
         return res.status(200).send({ message: "Player added successfully" });
     }).catch(err => {
         console.log(`${err} in addPlayer`)
+        return res.status(500).send({ message: "Something went wrong try again" });
     })
 
 
@@ -62,20 +65,21 @@ exports.deletePlayer = (req, res, next) => {
         res.status(200).send("Player get deleted successfully");
     }).catch(err => {
         console.log(`${err} in deletePlayer`)
+        return res.status(500).send({ message: "Something went wrong try again" });
     });
 }
 
 exports.editPlayer = (req, res, next) => {
     const { avg, birthplace, century,
         dob, fifties, img, name, noofmatches
-        , score, wickets } = req.body;
+        , score, wickets, career } = req.body;
 
     const { id } = req.params;
 
     const player = {
         avg, birthplace, century,
         dob, fifties, img, name: name.toUpperCase(), noofmatches
-        , score, wickets
+        , score, wickets, career
     }
 
     Player.update(player,
@@ -87,5 +91,6 @@ exports.editPlayer = (req, res, next) => {
             res.status(200).send("Player get updated successfully");
         }).catch(err => {
             console.log(`${err} in editPlayer`)
+            return res.status(500).send({ message: "Something went wrong try again" });
         });
 }

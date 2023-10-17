@@ -42,8 +42,13 @@ const Player = sequelize.define("player", {
     score: {
         type: Sequelize.INTEGER,
         allowNull: false
-    }, wickets: {
+    },
+    wickets: {
         type: Sequelize.INTEGER,
+        allowNull: false
+    },
+    career: {
+        type: Sequelize.TEXT,
         allowNull: false
     }
 })
