@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -25,18 +25,81 @@
     />
   </head>
   <body>
-    <!--Create Table Modal-->
+    <!--header-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <!-- Logo -->
+        <a class="navbar-brand" href="#">
+          <img src="../images/logo.webp" alt="Logo" width="30" height="24" />
+        </a>
+      </div>
+    </nav>
+
+    <!--Main Body-->
+    <div class="container-fluid">
+      <div class="row" style="height: 100vh">
+        <!--LeftSide it will fill onload all tables leftside-->
+        <div class="col-12 col-md-2 bg-light" style="overflow-y: auto">
+          <!-- Table names shown here -->
+          <div>
+            <h4>Table</h4>
+          </div>
+          <ul id="alltables" class="list-group link-offset-3-hover"></ul>
+        </div>
+        <!--Right Side on click of table it will display respective table-->
+        <div class="col-12 col-md-10" id="rightside">
+          <!--insert field in table open a model to add field-->
+          <button
+            class="btn btn-primary mb-3 insert"
+            data-bs-toggle="modal"
+            data-bs-target="#insertFieldModal"
+          >
+            Insert Field
+          </button>
+          <!--table-->
+          <main class="card mx-auto" id="tableCard">
+            <div class="card-header">
+              <h4 class="card-title text-center">Table</h4>
+            </div>
+            <div class="card-body text-center" id="respectiveTable">
+              <!--table will be added here-->
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <!--to open create table model-->
+    <!--
+      data-bs-toggle - what we want to toggle
+      data-bs-target - on click what will open
+      data-bs-dismiss - to close the toggle
+    -->
+    <div id="OpenCreateModal">
+      <button
+        type="button"
+        class="btn btn-primary"
+        data-bs-toggle="modal"
+        data-bs-target="#CreateTableModal"
+      >
+        Create Table
+      </button>
+    </div>
+
+    <!--Create table model-->
+    <!--
+      modal>popup dialog>content>((header>title>closebtnofbootstrap) && (body) && (footer) )
+    -->
     <div
       class="modal fade"
       id="CreateTableModal"
-      tabindex="-1"
-      aria-labelledby="CreateTableModalLabel"
+      aria-labelledby="modal-title"
       aria-hidden="true"
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-warning">
-            <h5 class="modal-title" id="CreateTableModalLabel">Create Table</h5>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Create New Table</h5>
             <button
               type="button"
               class="btn-close"
@@ -44,96 +107,126 @@
               aria-label="Close"
             ></button>
           </div>
-          <form id="CreateTableForm p-4" novalidate>
-            <h3>Table name</h3>
-            <input
-              type="text"
-              name="tablename"
-              id="tablename"
-              class="form-control"
-              required
-            />
-            <div id="fieldsContainer">
-              <div class="row">
-                <div class="col">
-                  <h5>Field name</h5>
-                  <input
-                    type="text"
-                    name="fieldname"
-                    id="fieldname"
-                    class="form-control"
-                    required
-                  />
-                </div>
-                <div class="col">
-                  <h5>Type</h5>
-                  <select
-                    name="fieldtype"
-                    id="fieldtype"
-                    class="form-control"
-                    required
-                  >
-                    <!-- Add your options here -->
-                    <option value="">Select type</option>
-                    <option value="string">String</option>
-                    <option value="integer">Integer</option>
-                    <option value="boolean">Boolean</option>
-                    <option value="json">JSON</option>
-                    <option value="double">Double</option>
-                  </select>
+          <div class="modal-body">
+            <form id="CreateTableForm" class="p-2" novalidate>
+              <h5>Table name</h5>
+              <input
+                type="text"
+                name="tablename"
+                id="tablename"
+                class="form-control"
+                required
+              />
+              <div id="fieldsContainer">
+                <div class="row">
+                  <div class="col">
+                    <h6>Field name</h6>
+                    <input
+                      type="text"
+                      name="fieldname"
+                      id="fieldname"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <h6>Type</h6>
+                    <select
+                      name="fieldtype"
+                      id="fieldtype"
+                      class="form-control"
+                      required
+                    >
+                      <!-- data type -->
+                      <option value="">Select type</option>
+                      <option value="string">String</option>
+                      <option value="integer">Integer</option>
+                      <option value="boolean">Boolean</option>
+                      <option value="json">JSON</option>
+                      <option value="double">Double</option>
+                    </select>
+                  </div>
                 </div>
               </div>
-            </div>
-            <button
-              type="button"
-              id="addFieldButton"
-              class="btn mt-3 bg-warning"
-            >
-              Add another field
-            </button>
-            <input
-              type="submit"
-              value="Create Table"
-              class="btn mt-3 bg-warning"
-            />
-          </form>
-        </div>
-      </div>
-    </div>
-    <!--Main Body-->
-    <div class="container">
-      <!--LeftSide it will fill onload all tables-->
-      <div class="row mt-2 mb-2 p-4" style="height: 100vh">
-        <div
-          class="col-12 col-md-3 p-3 d-flex align-items-center justify-content-center flex-column gap-2"
-        >
-          <div id="alltables">
-            <div>tablename</div>
+              <button
+                type="button"
+                id="addFieldButton"
+                class="btn mt-3 bg-primary-subtle"
+              >
+                Add another field
+              </button>
+              <input
+                type="submit"
+                value="Create Table"
+                class="btn mt-3 bg-primary text-white"
+              />
+            </form>
           </div>
-          <hr />
-        </div>
-        <!--Right Side on click of table it will display respective table-->
-        <div
-          class="col-12 col-md-9 text-center d-flex align-items-center justify-content-center"
-          id="rightside"
-        >
-          <!--insert field in table open a model to add field-->
-          <button>Insert Field</button>
-          <!--table-->
-          <main class="card mx-auto" id="tableCard"></main>
         </div>
       </div>
     </div>
 
-    <!--to open create table model-->
-    <button
-      type="button"
-      class="btn btn-primary"
-      data-bs-toggle="modal"
-      data-bs-target="#CreateTableModal"
+    <!--Add Field Modal-->
+    <div
+      class="modal fade"
+      id="insertFieldModal"
+      aria-labelledby="modal-title"
+      aria-hidden="true"
     >
-      Create Table
-    </button>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modal-title">Insert New Field</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="AddFieldForm" novalidate>
+              <div id="fieldsContainer">
+                <div class="row">
+                  <div class="col">
+                    <h6>Field name</h6>
+                    <input
+                      type="text"
+                      name="fieldname"
+                      id="fieldname"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                  <div class="col">
+                    <h6>Type</h6>
+                    <select
+                      name="fieldtype"
+                      id="fieldtype"
+                      class="form-control"
+                      required
+                    >
+                      <!-- data type -->
+                      <option value="">Select type</option>
+                      <option value="string">String</option>
+                      <option value="integer">Integer</option>
+                      <option value="boolean">Boolean</option>
+                      <option value="json">JSON</option>
+                      <option value="double">Double</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <input
+                type="submit"
+                value="Add Field"
+                class="btn mt-3 bg-primary text-white"
+              />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--JS-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
