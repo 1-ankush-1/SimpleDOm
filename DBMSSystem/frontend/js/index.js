@@ -21,7 +21,7 @@ async function onloadData() {
             addLeftSide(e)
         }
         //get all classes
-        var tables = document.querySelectorAll(".sometables");
+        let tables = document.querySelectorAll(".sometables");
 
         // Add an event listener to the all table
         for (let i = 0; i < tables.length; i++) {
@@ -39,6 +39,7 @@ function addLeftSide(tablename) {
     table.className = "list-group-item text-black-50 cursor-pointer sometables"
     table.textContent = tablename;
     alltables.appendChild(table);
+    table.addEventListener("click", fetchSpecificTable);
 }
 
 /**
@@ -206,12 +207,45 @@ function addFetchedFieldInTable(tableData) {
 function addNewTable(e) {
     e.preventDefault();
     // console.log("clicked");
-    const data = new FormData(createNewTable)
-    const table = {}
-    for (let entry of data.entries()) {
-        table[entry[0]] = entry[1];
+    let inputs = e.target.getElementsByTagName('input');
+    let selects = e.target.getElementsByTagName('select');
+    let data = {
+        tableName: '',
+        fields: []
+    };
+
+    //get table and fieldname
+    for (let j = 0; j < inputs.length; j++) {
+        if (inputs[j].name === 'tablename') {
+            data.tableName = inputs[j].value;
+        } else if (inputs[j].name === 'fieldname') {
+            data.fields.push({
+                name: inputs[j].value,
+                type: ''
+            });
+        }
     }
-    console.log(table);
+
+    //get fieldtypes
+    for (let k = 0; k < selects.length; k++) {
+        if (selects[k].name === 'fieldtype') {
+            data.fields[k].type = selects[k].value;
+        }
+    }
+
+    axios.post("http://localhost:3000/tables/add", data).then(res => {
+        if (res.status === 200) {
+            alert("Table created successfully");
+            addLeftSide(data.tableName.toLowerCase());
+            //close modal
+            let myModal = document.getElementById('CreateTableModal')
+            let modal = bootstrap.Modal.getInstance(myModal)
+            modal.hide()
+        }
+    }).catch(err => {
+        alert("Failed to Create");
+        console.log(err);
+    })
 }
 
 function addFieldInCreateModalForm(e) {

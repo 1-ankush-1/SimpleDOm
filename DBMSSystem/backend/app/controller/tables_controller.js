@@ -47,7 +47,24 @@ exports.getTableByName = (req, res, next) => {
 }
 
 exports.addTable = (req, res, next) => {
+    const { tableName, fields } = req.body;
 
+    let query = `CREATE TABLE ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY`;
+
+    fields.forEach(field => {
+        query += `, ${field.name} ${field.type.toUpperCase()}`;
+    });
+
+    query += ')';
+
+    sequelize.query(query)
+        .then(result => {
+            res.status(200).send("Table created successfully");
+        })
+        .catch(err => {
+            console.error('Error creating table:', err);
+            res.status(500).send("failed to creat table");
+        });
 }
 
 exports.deleteFieldInTable = (req, res, next) => {
@@ -84,8 +101,8 @@ exports.addFieldInTable = (req, res, next) => {
 
 function formatValue(value) {
     if (typeof value === 'string') {
-      return `"${value}"`; // Enclose string values in quotes
+        return `"${value}"`; // Enclose string values in quotes
     } else {
-      return value; // Leave non-string values as they are
+        return value; // Leave non-string values as they are
     }
-  }
+}
