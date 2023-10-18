@@ -187,37 +187,7 @@
             ></button>
           </div>
           <div class="modal-body">
-            <form id="AddFieldForm" novalidate>
-              <div id="fieldsContainer">
-                <div class="row">
-                  <div class="col">
-                    <h6>Field name</h6>
-                    <input
-                      type="text"
-                      name="fieldname"
-                      class="form-control"
-                      required
-                    />
-                  </div>
-                  <div class="col">
-                    <h6>Type</h6>
-                    <select name="fieldtype" class="form-control" required>
-                      <!-- data type -->
-                      <option value="">Select type</option>
-                      <option value="string">String</option>
-                      <option value="integer">Integer</option>
-                      <option value="boolean">Boolean</option>
-                      <option value="json">JSON</option>
-                      <option value="double">Double</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <input
-                type="submit"
-                value="Add Field"
-                class="btn mt-3 bg-primary text-white"
-              />
+            <form id="AddRowInTable" class="gap-2" novalidate>
             </form>
           </div>
         </div>

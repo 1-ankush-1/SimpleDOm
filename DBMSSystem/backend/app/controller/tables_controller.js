@@ -51,9 +51,9 @@ exports.addTable = (req, res, next) => {
 }
 
 exports.deleteFieldInTable = (req, res, next) => {
-    const { id } = req.params;
+    let { id } = req.params;
     const { tablename, fieldname } = req.query;
-
+    id = formatValue(id);
     sequelize.query(`DELETE FROM ${tablename} WHERE ${fieldname} = ${id}`,
         { type: sequelize.QueryTypes.DELETE })
         .then(data => {
@@ -64,6 +64,28 @@ exports.deleteFieldInTable = (req, res, next) => {
             res.status(500).send("failed to delete field");
         })
 }
+
 exports.addFieldInTable = (req, res, next) => {
+    let { tablekeys, tablevalues, tablename } = req.body;
+    console.log(tablekeys, tablevalues, tablename)
+    tablevalues = tablevalues.map(formatValue);
+
+    const query = `INSERT INTO ${tablename} (${tablekeys.join(', ')}) VALUES (${tablevalues.join(', ')})`;
+
+    sequelize.query(query, { type: sequelize.QueryTypes.INSERT }).then(data => {
+        console.log(data);
+        res.status(200).send("Inserted successfully");
+    }).catch(err => {
+        console.log(err);
+        res.status(500).send("failed to add field");
+    })
 
 }
+
+function formatValue(value) {
+    if (typeof value === 'string') {
+      return `"${value}"`; // Enclose string values in quotes
+    } else {
+      return value; // Leave non-string values as they are
+    }
+  }

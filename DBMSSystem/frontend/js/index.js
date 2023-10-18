@@ -50,7 +50,7 @@ const AddFieldContainer = document.getElementById("fieldsContainer");
 const createNewTable = document.getElementById("CreateTableForm");
 const respectiveTableDiv = document.getElementById("respectiveTable");
 const tableCardName = document.getElementById("tableCardName");
-const addNewRowInTable = document.getElementById("AddFieldForm");
+const addNewRowInTable = document.getElementById("AddRowInTable");
 addNewRowInTable.addEventListener("submit", addNewRowInTablePostReq)
 addField.addEventListener('click', addFieldInCreateModalForm);
 createNewTable.addEventListener("submit", addNewTable);
@@ -63,25 +63,37 @@ function fetchSpecificTable(e) {
     //get data of particular table
     axios.post("http://localhost:3000/tables/tablename", { tablename: e.target.id }).then(res => {
         if (res.status === 200) {
-            addFetchedFieldInTable(res.data);
+            //remove child before adding child
+            while (respectiveTableDiv.firstChild) {
+                respectiveTableDiv.removeChild(respectiveTableDiv.firstChild);
+            }
+
+            while (addNewRowInTable.firstChild) {
+                addNewRowInTable.removeChild(addNewRowInTable.firstChild)
+            }
+            const tabledata = res.data;
+            addFetchedFieldInTable(tabledata);
             tableCardName.textContent = e.target.id;
+
+            for (let i = 0; i < tabledata.tablehead.length; i++) {
+                let input = document.createElement('input');
+                input.name = tabledata.tablehead[i];
+                input.placeholder = tabledata.tablehead[i];
+                input.className = "form-control"
+                addNewRowInTable.appendChild(input);
+            }
+
+            let button = document.createElement('button');
+            button.className = "btn mt-3 bg-primary text-white"
+            button.type = "submit"
+            button.textContent = "Add"
+            addNewRowInTable.appendChild(button)
         }
     }).catch(err => {
         console.log(err);
     })
 }
 
-function addNewRowInTablePostReq(e) {
-    e.preventDefault();
-
-    const data = new FormData(e.target)
-    const table = {}
-    for (let entry of data.entries()) {
-        table[entry[0]] = entry[1];
-    }
-    console.log(table);
-
-}
 
 function deleteFieldFromTable(e) {
     e.preventDefault();
@@ -93,17 +105,61 @@ function deleteFieldFromTable(e) {
             if (res.status === 200) {
                 const tableBodyID = document.getElementById("tableId");
                 tableBodyID.removeChild(row);
+                alert("user deleted successfully");
             }
         }).catch(err => console.log(err));
     }
 }
 
-function addFetchedFieldInTable(tableData) {
-    //remove child before adding child
-    while (respectiveTableDiv.firstChild) {
-        respectiveTableDiv.removeChild(respectiveTableDiv.firstChild);
+function addNewRowInTablePostReq(e) {
+    e.preventDefault();
+    const data = new FormData(e.target)
+    const table = {}
+    for (let entry of data.entries()) {
+        table[entry[0]] = entry[1];
     }
+    //seprate key and values
+    const tablekeys = Object.keys(table);
+    const tablevalues = Object.values(table);
 
+    axios.post("http://localhost:3000/tables/insert-field", {
+        tablekeys,
+        tablevalues,
+        tablename: tableCardName.textContent
+    }).then(res => {
+        if (res.status === 200) {
+            alert("user inserted successfully");
+            addNewlyInsertedFieldInTable(tablevalues);
+            //close modal
+            let myModal = document.getElementById('insertFieldModal')
+            let modal = bootstrap.Modal.getInstance(myModal)
+            modal.hide()
+        }
+    }).catch(err => {
+        alert("Failed to Insert");
+        console.log(err);
+    })
+}
+
+function addNewlyInsertedFieldInTable(tablevalues) {
+    //adding new data row in table
+    const tbody = document.getElementById("tableId");
+    const tbodyrow = document.createElement("tr");
+    const tdbutton = document.createElement("td");
+    const delbutton = document.createElement("button");
+    delbutton.textContent = "Delete";
+    delbutton.className = "btn bg-danger text-white delete";
+    for (let j = 0; j < tablevalues.length; j++) {
+        const td = document.createElement("td");
+        td.textContent = tablevalues[j];
+        tbodyrow.appendChild(td);
+    }
+    tdbutton.appendChild(delbutton);
+    tbodyrow.appendChild(tdbutton);
+    tbody.appendChild(tbodyrow);
+}
+
+function addFetchedFieldInTable(tableData) {
     const table = document.createElement("table");
     table.className = "table table-hover table-bordered";
     const thead = document.createElement("thead");
