@@ -31,12 +31,12 @@ exports.getTableByName = (req, res, next) => {
                 return sequelize.query(`
                 SELECT COLUMN_NAME 
                 FROM INFORMATION_SCHEMA.COLUMNS 
-                WHERE TABLE_NAME = '${tablename}'`,
+                WHERE TABLE_SCHEMA = 'dbms-app' AND TABLE_NAME = '${tablename}'`,
                     { type: sequelize.QueryTypes.SELECT })
             }
         }).then(result => {
             //get keys
-            if(tabledata.tablevalues.length <= 0){
+            if (tabledata.tablevalues.length <= 0) {
                 tabledata.tablehead = result.map(row => row.COLUMN_NAME);
             }
             return res.status(200).send(tabledata);
@@ -51,7 +51,18 @@ exports.addTable = (req, res, next) => {
 }
 
 exports.deleteFieldInTable = (req, res, next) => {
+    const { id } = req.params;
+    const { tablename, fieldname } = req.query;
 
+    sequelize.query(`DELETE FROM ${tablename} WHERE ${fieldname} = ${id}`,
+        { type: sequelize.QueryTypes.DELETE })
+        .then(data => {
+            console.log(data);
+            res.status(200).send("deleted successfully");
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send("failed to delete field");
+        })
 }
 exports.addFieldInTable = (req, res, next) => {
 

@@ -59,7 +59,7 @@
           <!--table-->
           <main class="card mx-auto" id="tableCard">
             <div class="card-header">
-              <h4 class="card-title text-center">Table</h4>
+              <h4 class="card-title text-center" id="tableCardName">Table</h4>
             </div>
             <div class="card-body text-center" id="respectiveTable">
               <!--table will be added here-->
@@ -170,13 +170,15 @@
     <div
       class="modal fade"
       id="insertFieldModal"
-      aria-labelledby="modal-title"
+      aria-labelledby="modal-title-insert"
       aria-hidden="true"
     >
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="modal-title">Insert New Field</h5>
+            <h5 class="modal-title" id="modal-title-insert">
+              Insert New Field
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -193,19 +195,13 @@
                     <input
                       type="text"
                       name="fieldname"
-                      id="fieldname"
                       class="form-control"
                       required
                     />
                   </div>
                   <div class="col">
                     <h6>Type</h6>
-                    <select
-                      name="fieldtype"
-                      id="fieldtype"
-                      class="form-control"
-                      required
-                    >
+                    <select name="fieldtype" class="form-control" required>
                       <!-- data type -->
                       <option value="">Select type</option>
                       <option value="string">String</option>

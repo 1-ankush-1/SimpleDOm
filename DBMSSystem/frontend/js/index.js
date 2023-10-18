@@ -49,7 +49,9 @@ const addField = document.getElementById("addFieldButton");
 const AddFieldContainer = document.getElementById("fieldsContainer");
 const createNewTable = document.getElementById("CreateTableForm");
 const respectiveTableDiv = document.getElementById("respectiveTable");
-const listenForDelete = document.getElementById("tableId");
+const tableCardName = document.getElementById("tableCardName");
+const addNewRowInTable = document.getElementById("AddFieldForm");
+addNewRowInTable.addEventListener("submit", addNewRowInTablePostReq)
 addField.addEventListener('click', addFieldInCreateModalForm);
 createNewTable.addEventListener("submit", addNewTable);
 
@@ -62,10 +64,38 @@ function fetchSpecificTable(e) {
     axios.post("http://localhost:3000/tables/tablename", { tablename: e.target.id }).then(res => {
         if (res.status === 200) {
             addFetchedFieldInTable(res.data);
+            tableCardName.textContent = e.target.id;
         }
     }).catch(err => {
         console.log(err);
     })
+}
+
+function addNewRowInTablePostReq(e) {
+    e.preventDefault();
+
+    const data = new FormData(e.target)
+    const table = {}
+    for (let entry of data.entries()) {
+        table[entry[0]] = entry[1];
+    }
+    console.log(table);
+
+}
+
+function deleteFieldFromTable(e) {
+    e.preventDefault();
+    if (e.target.classList.contains("delete")) {
+        let row = e.target.parentElement.parentElement;
+        let fieldname = row.parentElement.parentElement.children[0].children[0].children[0].textContent;
+        const fieldvalue = row.children[0].textContent;
+        axios.delete(`http://localhost:3000/tables/delete/${fieldvalue}?tablename=${tableCardName.textContent}&fieldname=${fieldname}`).then(res => {
+            if (res.status === 200) {
+                const tableBodyID = document.getElementById("tableId");
+                tableBodyID.removeChild(row);
+            }
+        }).catch(err => console.log(err));
+    }
 }
 
 function addFetchedFieldInTable(tableData) {
@@ -76,7 +106,6 @@ function addFetchedFieldInTable(tableData) {
 
     const table = document.createElement("table");
     table.className = "table table-hover table-bordered";
-    table.id = "tableId"
     const thead = document.createElement("thead");
     thead.className = "table-primary";
     const theadrow = document.createElement("tr");
@@ -93,6 +122,7 @@ function addFetchedFieldInTable(tableData) {
     table.appendChild(thead);
     //put body in table
     const tbody = document.createElement("tbody");
+    tbody.id = "tableId"
     for (let i = 0; i < tableData.tablevalues.length; i++) {
         const tbodyrow = document.createElement("tr");
         const tdbutton = document.createElement("td");
@@ -110,6 +140,8 @@ function addFetchedFieldInTable(tableData) {
     }
     table.appendChild(tbody);
     respectiveTableDiv.appendChild(table);
+    const listenForDelete = document.getElementById("tableId");
+    listenForDelete.addEventListener("click", deleteFieldFromTable);
 }
 
 /**
