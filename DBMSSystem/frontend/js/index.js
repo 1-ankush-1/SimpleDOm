@@ -206,7 +206,7 @@ function addFetchedFieldInTable(tableData) {
  */
 function addNewTable(e) {
     e.preventDefault();
-    // console.log("clicked");
+    // get data by tagnames
     let inputs = e.target.getElementsByTagName('input');
     let selects = e.target.getElementsByTagName('select');
     let data = {
@@ -271,12 +271,12 @@ function addFieldInCreateModalForm(e) {
         class="form-control"
         required
       >
-        <option value="">Select type</option>
-        <option value="string">String</option>
-        <option value="integer">Integer</option>
-        <option value="boolean">Boolean</option>
-        <option value="json">JSON</option>
-        <option value="double">Double</option>
+      <option value="">Select type</option>
+      <option value="VARCHAR(255)">String</option>
+      <option value="INT">Integer</option>
+      <option value="boolean">Boolean</option>
+      <option value="json">JSON</option>
+      <option value="double">Double</option>
       </select>
     </div>
     `

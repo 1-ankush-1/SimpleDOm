@@ -49,10 +49,15 @@ exports.getTableByName = (req, res, next) => {
 exports.addTable = (req, res, next) => {
     const { tableName, fields } = req.body;
 
-    let query = `CREATE TABLE ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY`;
+    //create
+    let query = `CREATE TABLE ${tableName} (`;
 
-    fields.forEach(field => {
-        query += `, ${field.name} ${field.type.toUpperCase()}`;
+    //concatinate fields
+    fields.forEach((field, index) => {
+        if (index !== 0) {
+            query += ',';
+        }
+        query += `${field.name} ${field.type.toUpperCase()}`;
     });
 
     query += ')';
