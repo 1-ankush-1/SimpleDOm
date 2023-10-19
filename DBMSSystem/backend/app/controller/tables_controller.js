@@ -1,13 +1,15 @@
 const sequelize = require("../config/connect");
+const dbconfig = require("../utils/dbconfig")
 
 exports.getAllTables = (req, res, next) => {
-
+    //it will return all tables
     sequelize.getQueryInterface().showAllSchemas().then((alltables) => {
         //getting only names
         const tables = alltables.map(obj => obj['Tables_in_dbms-app']);
         res.status(200).send(tables);
     }).catch((err) => {
         console.log('showAllSchemas ERROR', err);
+        res.status(500).send("no table found");
     });
 }
 
@@ -31,7 +33,7 @@ exports.getTableByName = (req, res, next) => {
                 return sequelize.query(`
                 SELECT COLUMN_NAME 
                 FROM INFORMATION_SCHEMA.COLUMNS 
-                WHERE TABLE_SCHEMA = 'dbms-app' AND TABLE_NAME = '${tablename}'`,
+                WHERE TABLE_SCHEMA = '${dbconfig.database}' AND TABLE_NAME = '${tablename}'`,
                     { type: sequelize.QueryTypes.SELECT })
             }
         }).then(result => {
@@ -52,7 +54,7 @@ exports.addTable = (req, res, next) => {
     //create
     let query = `CREATE TABLE ${tableName} (`;
 
-    //concatinate fields
+    //concatinate fields and types together acc to structure
     fields.forEach((field, index) => {
         if (index !== 0) {
             query += ',';
@@ -104,10 +106,11 @@ exports.addFieldInTable = (req, res, next) => {
 
 }
 
+//to check if value is string because in database we need to inclose it with ""
 function formatValue(value) {
     if (typeof value === 'string') {
-        return `"${value}"`; // Enclose string values in quotes
+        return `"${value}"`; 
     } else {
-        return value; // Leave non-string values as they are
+        return value; 
     }
 }

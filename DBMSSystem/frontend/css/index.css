@@ -24,6 +24,10 @@ body {
   align-items: center;
 }
 
+#OpenCreateModal button {
+  width: 16.5%;
+}
+
 .list-group {
   border: none;
 }
@@ -34,13 +38,17 @@ body {
   border: none;
 }
 
-.list-group-item:hover {
+.list-group-item:hover,
+.list-group-item:active {
   background-color: rgb(248, 249, 250);
   color: black !important;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 710px) {
   #OpenCreateModal {
     justify-content: center;
+  }
+  #OpenCreateModal button {
+    width: 50%;
   }
 }
