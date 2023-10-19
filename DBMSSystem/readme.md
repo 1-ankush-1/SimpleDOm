@@ -6,7 +6,7 @@ This project is a Database Management System (DBMS) that allows users to manage 
 
 This project is built using the following technologies:
 
-- **Frontend**: HTML, CSS, JavaScript
+- **Frontend**: HTML, CSS, JavaScript, Bootstrap
 - **Backend**: Node.js, Express.js
 - **Database**: MySQL
 
