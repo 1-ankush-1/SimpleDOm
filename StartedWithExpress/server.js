@@ -4,9 +4,12 @@ const path = require("path");
 const adminRoutes = require("./Routes/admin.js");
 const shopRoutes = require("./Routes/shop.js");
 const contactRoutes = require("./Routes/contactus.js");
+const errorController404 = require("./controllers/errorController404.js");
 
 //initalise new exprees object
 const app = express();
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 //body-parser do the req body parsing(handel form body not files and json)
 app.use(
@@ -24,9 +27,7 @@ app.use("/shop", shopRoutes);
 app.use("/contactus", contactRoutes);
 
 //if no page found
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, "views", "404.html"));
-})
+app.use(errorController404.get404);
 
 //start the server
 app.listen(4000, () => {
