@@ -2,18 +2,19 @@
 async function onloadData() {
     try {
         //get data
-        const items = await axios.get("http://localhost:4000/shopitems");
+        const items = await axios.get("http://localhost:3000/shopitems");
 
         //check if data is empty
-        if (items.data.length <= 0) {
+        if (items.data.data.length <= 0) {
             return;
         }
+        console.log(items.data.data.data)
 
         //setting data in localstorage
-        localStorage.setItem("allproduct", JSON.stringify(items.data));
+        localStorage.setItem("allproduct", JSON.stringify(items.data.data));
 
         //adding data in table
-        for (let prod of items.data) {
+        for (let prod of items.data.data) {
             addinTable(prod)
         }
     } catch (err) {
@@ -31,16 +32,17 @@ function addItem(e) {
     for (let [name, value] of data) {
         item[name] = value
     }
-    axios.post("http://localhost:4000/shopitems/add", item).then((res) => {
+    axios.post("http://localhost:3000/shopitems/add", item).then((res) => {
         //when get response from backend add it in localstorage
-        if (Object.keys(res?.data).length > 0) {
+        if (res.status === 200) {
             let allProducts = JSON.parse(localStorage.getItem("allproduct")) ?? [];
-            allProducts.push(res.data);
+            allProducts.push(res.data.data);
             localStorage.setItem("allproduct", JSON.stringify(allProducts));
             //adding data in table
-            addinTable(res.data);
+            addinTable(res.data.data);
             //reset the input field data
             formData.reset();
+            alert(res.data.message);
         }
     }).catch(err => console.log(err));
 }
@@ -65,11 +67,11 @@ function addinTable(item) {
     let btnbuy2 = document.createElement('button');
     let btnbuy3 = document.createElement('button');
     btnbuy1.className = "btn btn-primary me-2 buy 1"
-    editbtn.textContent = "Buy 1";
-    btnbuy2.className = "btn btn-primary me-2 but 2"
-    editbtn.textContent = "Buy 2";
+    btnbuy1.textContent = "Buy 1";
+    btnbuy2.className = "btn btn-primary me-2 buy 2"
+    btnbuy2.textContent = "Buy 2";
     btnbuy3.className = "btn btn-primary me-2 buy 3"
-    editbtn.textContent = "Buy 3";
+    btnbuy3.textContent = "Buy 3";
     //append buttons
     operations.appendChild(btnbuy1);
     operations.appendChild(btnbuy2);
@@ -89,7 +91,6 @@ function addinTable(item) {
 //Delete and Edit User
 function buyItem(e) {
     e.preventDefault();
-
     //check if any class contains buy
     if (e.target.classList.contains("buy")) {
         let prodTobuy;
@@ -100,27 +101,35 @@ function buyItem(e) {
         } else if (e.target.classList.contains("3")) {
             prodTobuy = 3;
         }
+        const row = e.target.parentElement.parentElement;
 
         //edit in the backend
-        axios.put(`http://localhost:4000/shopitems/buy/${row.id}`).then((res) => {
+        axios.put(`http://localhost:3000/shopitems/buy/${row.id}?quantity=${prodTobuy}`).then((res) => {
             //when item get edited
             if (res.status === 200) {
                 //get row and all cell data
                 let row = e.target.parentElement.parentElement;
-                row.cells[3].innerText - prodTobuy;
+                console.log(row);
+                row.cells[3].textContent = row.cells[3].textContent - prodTobuy;
 
                 let allProducts = JSON.parse(localStorage.getItem("allproduct"));
                 //compare by id
                 const data = allProducts.map((app) => {
-                    if (app.id === row.id) {
-                        return row.quantity - prodTobuy;
+                    if (app.id === parseInt(row.id)) {
+                        app.quantity = parseInt(row.cells[3].textContent);
+                        return app;
                     }
+                    return app;
                 })
+                console.log(data)
 
                 //setting localstorage after removing item
                 localStorage.setItem("allproduct", JSON.stringify(data));
             }
-        }).catch(err => console.log(err));
+        }).catch(err => {
+            alert("no item left");
+            console.log(err)
+        });
     }
 }
 
