@@ -66,11 +66,11 @@ function addinTable(item) {
     let btnbuy1 = document.createElement('button');
     let btnbuy2 = document.createElement('button');
     let btnbuy3 = document.createElement('button');
-    btnbuy1.className = "btn btn-primary me-2 buy 1"
+    btnbuy1.className = "btn bg-dark-subtle text-black me-2 buy 1"
     btnbuy1.textContent = "Buy 1";
-    btnbuy2.className = "btn btn-primary me-2 buy 2"
+    btnbuy2.className = "btn bg-dark-subtle text-black me-2 buy 2"
     btnbuy2.textContent = "Buy 2";
-    btnbuy3.className = "btn btn-primary me-2 buy 3"
+    btnbuy3.className = "btn bg-dark-subtle text-black me-2 buy 3"
     btnbuy3.textContent = "Buy 3";
     //append buttons
     operations.appendChild(btnbuy1);
