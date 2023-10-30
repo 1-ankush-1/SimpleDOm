@@ -1,0 +1,27 @@
+- create a server.js file
+- npm init -y
+- tsc --init
+- rename server.js to server.ts
+    -now inside the server.ts it will not recognise require("express) because it doent know file will run or server or webbrowser
+        - install this @types/node (means we can use nodejs syntex with typescript means doing translation)
+            npm i --save-dev @types/node
+    - now we can not get the sugestion what is insde the library suggestion
+        - install it for express(we can also find for other library as well just change the name check on google first)
+            npm install --save-dev @types/express
+        and add this in tsconfig.json in complierOptions
+            "moduleResolution": "node",
+        - it still wont give suggestion
+            - either we can use 
+                import express = require("express");
+                    OR 
+                import express from "express";
+            (but when we compile it from typescript to javascript it compiled down to the require syntex in app.js)
+- separate js from ts
+    - open tsconfig.json
+    - go to Emit and give some path to store js files
+    - "outDir": "./dist",
+    - separate ts to so  
+    - give path insdie the where you moved the ts files
+    - "rootDir": "./app", 
+
+imp - run tsc command before starting npm server
